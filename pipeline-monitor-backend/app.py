@@ -1,7 +1,8 @@
-from flask import request, Flask, jsonify
+from flask import abort, request, Flask, jsonify
 from flask_cors import CORS
 import json
 import random
+from posix import abort
 
 
 app = Flask(__name__)
@@ -24,7 +25,10 @@ def delete_pipeline(pipeline_name):
 
 @app.route('/pipeline/<string:pipeline_name>', methods = ['GET'])
 def get_pipeline_status(pipeline_name):
-    return {i : random.randint(1,10) for i in pipelines[pipeline_name]}, 200
+    if pipeline_name in pipelines.keys():
+        return {i : random.randint(1,10) for i in pipelines[pipeline_name]}, 200
+    else:
+        return f"can't find pipe", 404
 
 @app.route('/pipeline/<string:pipeline_name>/<string:topic_name>', methods = ['GET'])
 def get_topic_status(pipeline_name, topic_name):
