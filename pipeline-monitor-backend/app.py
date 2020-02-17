@@ -1,6 +1,8 @@
 from flask import request, Flask, jsonify
 from flask_cors import CORS
 import json
+import random
+
 
 app = Flask(__name__)
 app.run(host= '0.0.0.0')
@@ -22,13 +24,7 @@ def delete_pipeline(pipeline_name):
 
 @app.route('/pipeline/<string:pipeline_name>', methods = ['GET'])
 def get_pipeline_status(pipeline_name):
-    return {
-        "topic_1": 1,
-        "topic_2": 2,
-        "topic_3": 6,
-        "topic_4": 9,
-        "topic_5": 2,
-    }, 200
+    return {i : random.randint(1,10) for i in pipelines[pipeline_name]}, 200
 
 @app.route('/pipeline/<string:pipeline_name>/<string:topic_name>', methods = ['GET'])
 def get_topic_status(pipeline_name, topic_name):
