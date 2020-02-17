@@ -87,16 +87,22 @@
 
         async getTopics(pipelineName) {
 
+            if (this.timer) {
+                clearTimeout(this.timer);
+            }
+            this.timer = setTimeout(() => this.getTopics(pipelineName), 10000);
             try {
                 this.topics = await topicsService.getTopics(pipelineName);
             } catch(err) {
                 this.topics = [];
             }
 
+
         }
 
         async topicSelected(topic) {
             this.selectedTopicData = await topicsService.getTopicData(this.pipelineName, topic);
+
 
         }
         addTopic() {

@@ -13,13 +13,14 @@ export class TopicsService {
 
     async getTopicData(pipeline, topic) {
         const response = await fetch(`${BaseUrl}/${pipeline}/${topic.name}`);
-        return await response.json();
+        const result =  await response.json();
+        return {...result, name: topic.name};
     }
 
     async queryTopics(pipeline, topicNames) {
         const response = await  fetch(`${BaseUrl}/${pipeline}`, {
             method: 'post',
-            body: JSON.stringify(topicNames)
+            body: `[${topicNames.map(name => `'${name}'`)}]`
         });
 
         return response;
@@ -29,7 +30,9 @@ export class TopicsService {
 
         const [min, max] = [0, 10];
 
-        const middle = (min + max) / 2;
+        if (value % 2 === 1) {
+            value++;
+        }
         const scale = 255 / (max - min);
 
         if (value <= min) {
