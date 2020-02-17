@@ -3,13 +3,6 @@
         <label>Pipeline name
         <input type="text" v-on:change="queryPipeline($event)"></label>
 
-        <label>
-            Topics
-            <input type="text" placeholder="topics" ref="topicNames">
-
-        </label>
-        <button v-on:click="addTopic()" >Create topics</button>
-
 
         <div class="topics-container">
             <div v-for="item in this.topics" v-bind:key="item.name" style="display: flex">
