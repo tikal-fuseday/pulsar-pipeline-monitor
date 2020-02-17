@@ -1,7 +1,9 @@
-from flask import request, Flask, jsonify
+from flask import abort, request, Flask, jsonify
 from flask_cors import CORS
 import json
 import random
+from posix import abort
+import pulsar_controller as pc
 
 
 app = Flask(__name__)
@@ -24,37 +26,11 @@ def delete_pipeline(pipeline_name):
 
 @app.route('/pipeline/<string:pipeline_name>', methods = ['GET'])
 def get_pipeline_status(pipeline_name):
-    return {i : random.randint(1,10) for i in pipelines[pipeline_name]}, 200
+    if pipeline_name in pipelines.keys():
+        return pc.pipeline_health(pipelines[pipeline_name]), 200
+    else:
+        return f"can't find pipe", 404
 
 @app.route('/pipeline/<string:pipeline_name>/<string:topic_name>', methods = ['GET'])
 def get_topic_status(pipeline_name, topic_name):
-    return {
-        "msgRateIn": 4641.528542257553,
-        "msgThroughputIn": 44663039.74947473,
-        "msgRateOut": 0,
-        "msgThroughputOut": 0,
-        "averageMsgSize": 1232439.816728665,
-        "storageSize": 135532389160,
-        "publishers": [
-            {
-            "msgRateIn": 57.855383881403576,
-            "msgThroughputIn": 558994.7078932219,
-            "averageMsgSize": 613135,
-            "producerId": 0,
-            "producerName": None,
-            "address": None,
-            "connectedSince": None
-            }
-        ],
-        "subscriptions": {
-            "my-topic_subscription": {
-            "msgRateOut": 0,
-            "msgThroughputOut": 0,
-            "msgBacklog": 116632,
-            "type": None,
-            "msgRateExpired": 36.98245516804671,
-            "consumers": []
-            }
-        },
-        "replication": {}
-        }, 200
+    return pc.topic_stats(topic_name), 200
