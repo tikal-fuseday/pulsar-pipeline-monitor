@@ -1,15 +1,24 @@
-from flask import Flask, jsonify
- 
+from flask import request, Flask, jsonify
+from flask_cors import CORS
+import json
+
 app = Flask(__name__)
- 
+app.run(host= '0.0.0.0')
+CORS(app)
+
+pipelines = {}
+
 @app.route('/pipeline/<string:pipeline_name>', methods = ['POST'])
 def create_pipeline(pipeline_name):
-    return f"Creating new pipeline: {pipeline_name}", 201
+    pipelines[pipeline_name] = json.loads(request.data)
+    return f"Created pipeline: {pipeline_name}", 201
 
 
 @app.route('/pipeline/<string:pipeline_name>', methods = ['DELETE'])
 def delete_pipeline(pipeline_name):
-    return f"Deleting Pipeline: {pipeline_name}", 200
+    print(pipelines[pipeline_name])
+    del pipelines[pipeline_name]
+    return f"Deleted Pipeline: {pipeline_name}", 200    
 
 @app.route('/pipeline/<string:pipeline_name>', methods = ['GET'])
 def get_pipeline_status(pipeline_name):
