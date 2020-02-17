@@ -59,12 +59,9 @@
         }
 
         async topicSelected(topic) {
-            console.log('topic', topic);
-
             const response = await fetch(`http://192.168.100.37:5000/pipeline/a/${topic.name}`);
             const topicData = await response.json();
             this.selectedTopicData = topicData;
-            console.log('topic data', topicData);
         }
 
     }
