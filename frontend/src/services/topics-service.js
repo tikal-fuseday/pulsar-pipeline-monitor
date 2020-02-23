@@ -31,7 +31,7 @@ export class TopicsService {
         const [min, max] = [0, 10];
 
         if (value % 2 === 1) {
-            value++;
+            value--;
         }
         const scale = 255 / (max - min);
 

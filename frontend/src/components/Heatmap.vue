@@ -18,18 +18,38 @@
         </div>
         <TopicData v-if="selectedTopicData" v-bind:topic-data="this.selectedTopicData"></TopicData>
 
-        <div v-bind:style="getStyle(getMaxValue())">
+
+        <div v-bind:style="getStyle(getMaxValue())" class="max-value">
+            <span v-if="topics && topics.length">
             Pipeline value {{getMaxValue()}}
+                </span>
         </div>
     </div>
 </template>
 
-<style scoped>
+<style scoped >
+    input {
+        border-radius: 7px;
+        border-width: 1px;
+        width: 200px;
+        height: 20px;
+        border-style: solid;
+        outline: none;
+        font-size: 16px;
+    ;
+
+    }
+    .max-value {
+       font-size: 20px;
+        margin-top: 10px;
+    }
     div.topics-container {
         display: flex;
         justify-content: center;
         max-width: 70em;
         overflow-x: scroll;
+        margin-top: 10px;
+
     }
     div.topics-container div {
         align-self: center;
@@ -83,6 +103,7 @@
             if (this.timer) {
                 clearTimeout(this.timer);
             }
+
             this.timer = setTimeout(() => this.getTopics(pipelineName), 10000);
             try {
                 this.topics = await topicsService.getTopics(pipelineName);
